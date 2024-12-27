@@ -1,39 +1,37 @@
-public class Dettagli_C_Catalogo extends Corso_Catalogo {
+public class CorsoCatalogo {
+    private static int id_cat;
+    private String Titolo;
+
+    public CorsoCatalogo(String titolo, String settore, String descrizione, String argomento, double costo_A_Persona, ModalitaErogazione modalita, TipoServizio tipoServizio) {
+        Titolo = titolo;
+        Settore = settore;
+        Descrizione = descrizione;
+        Argomento = argomento;
+        Costo_A_Persona = costo_A_Persona;
+        this.modalita = modalita;
+        this.tipoServizio = tipoServizio;
+    }
+
+    public int getId() {
+        return id_cat;
+    }
+
+    public String getTitolo() {
+        return Titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        Titolo = titolo;
+    }
 
     private String Settore;
     private String Argomento;
     private String Descrizione;
     private double Costo_A_Persona;
 
-    // Enum per la modalità di erogazione
-    public enum ModalitaErogazione {
-        DISTANZA,
-        PRESENZA,
-        IBRIDA
-    }
-
-    // Enum per il tipo di servizio
-    public enum TipoServizio {
-        LEZIONE,
-        LABORATORIO,
-        SEMINARI
-    }
-
     // Campi per memorizzare i valori degli enum
     private ModalitaErogazione modalita;
     private TipoServizio tipoServizio;
-
-    // Costruttore
-    public Dettagli_C_Catalogo(int id_C_Cata, String Titolo, String Settore, String Argomento,String Descrizione, double Costo_A_Persona,ModalitaErogazione modalita, TipoServizio tipoServizio) {
-        super(id_C_Cata, Titolo);
-        this.Settore = Settore;
-        this.Argomento = Argomento;
-        this.Descrizione = Descrizione;
-        this.Costo_A_Persona = Costo_A_Persona;
-        this.modalita = modalita;
-        this.tipoServizio = tipoServizio;
-    }
-
 
     // Getter e Setter
     public String getSettore() {
@@ -85,15 +83,17 @@ public class Dettagli_C_Catalogo extends Corso_Catalogo {
     }
 
     // Metodo per stampare i dettagli
+
     @Override
     public String toString() {
-        return "Dettagli_C_Catalogo{" +
-                "Settore='" + Settore + '\'' +
+        return "Corso_Catalogo{" +
+                "Titolo='" + Titolo + '\'' +
+                ", Settore='" + Settore + '\'' +
                 ", Argomento='" + Argomento + '\'' +
                 ", Descrizione='" + Descrizione + '\'' +
                 ", Costo_A_Persona=" + Costo_A_Persona +
-                ", Modalita=" + modalita +
-                ", TipoServizio=" + tipoServizio +
+                ", modalita=" + modalita +
+                ", tipoServizio=" + tipoServizio +
                 '}';
     }
 }

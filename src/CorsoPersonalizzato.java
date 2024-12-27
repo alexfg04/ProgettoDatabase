@@ -1,40 +1,71 @@
-public class Dettagli_C_Personalizzato extends Corso_Personalizzato{
+public class CorsoPersonalizzato {
 
+    private static int id_cat;
+    private String titolo;
+
+    private String date_in;
+    private String date_fine;
+    private String tutor;
     private boolean DMA; // Dispositivo o strumento richiesto
     private int n_trasferte; // Numero di trasferte previste
     private String Descrizione;
     private Double Costo_servizio;
-
-    // Enum per la modalità di erogazione
-    public enum ModalitaErogazione {
-        DISTANZA,
-        PRESENZA,
-        IBRIDA
-    }
-
-    // Enum per il tipo di servizio
-    public enum TipoServizio {
-        LEZIONE,
-        LABORATORIO,
-        SEMINARI
-    }
 
     // Campi per memorizzare i valori degli enum
     private ModalitaErogazione modalita;
     private TipoServizio tipoServizio;
 
     // Costruttore
-    public Dettagli_C_Personalizzato(int id_Corso_Personalizzato, String titolo, String date_in, String date_fine, String tutor,boolean DMA, int n_trasferte, String Descrizione, Double Costo_servizio, ModalitaErogazione modalita, TipoServizio tipoServizio) {
-        super(id_Corso_Personalizzato,titolo,date_in,date_fine,tutor);
+    public CorsoPersonalizzato(String titolo, String date_in, String date_fine, String tutor, boolean DMA, int n_trasferte, String descrizione, Double costo_servizio, ModalitaErogazione modalita, TipoServizio tipoServizio) {
+        this.titolo = titolo;
+        this.date_in = date_in;
+        this.date_fine = date_fine;
+        this.tutor = tutor;
         this.DMA = DMA;
         this.n_trasferte = n_trasferte;
-        this.Descrizione = Descrizione;
-        this.Costo_servizio = Costo_servizio;
+        Descrizione = descrizione;
+        Costo_servizio = costo_servizio;
         this.modalita = modalita;
         this.tipoServizio = tipoServizio;
     }
 
     // Getter e Setter
+    public int getId() {
+        return id_cat;
+    }
+
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public String getDate_in() {
+        return date_in;
+    }
+
+    public void setDate_in(String date_in) {
+        this.date_in = date_in;
+    }
+
+    public String getDate_fine() {
+        return date_fine;
+    }
+
+    public void setDate_fine(String date_fine) {
+        this.date_fine = date_fine;
+    }
+
+    public String getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(String tutor) {
+        this.tutor = tutor;
+    }
+
     public boolean isDMA() {
         return DMA;
     }
@@ -86,13 +117,17 @@ public class Dettagli_C_Personalizzato extends Corso_Personalizzato{
     // Metodo toString
     @Override
     public String toString() {
-        return "Dettagli_C_Personalizzato{" +
-                "DMA=" + DMA +
+        return "Corso_Personalizzato{" +
+                "titolo='" + titolo + '\'' +
+                ", date_in='" + date_in + '\'' +
+                ", date_fine='" + date_fine + '\'' +
+                ", tutor='" + tutor + '\'' +
+                ", DMA=" + DMA +
                 ", n_trasferte=" + n_trasferte +
                 ", Descrizione='" + Descrizione + '\'' +
                 ", Costo_servizio=" + Costo_servizio +
-                ", Modalita=" + modalita +
-                ", TipoServizio=" + tipoServizio +
+                ", modalita=" + modalita +
+                ", tipoServizio=" + tipoServizio +
                 '}';
     }
 }
