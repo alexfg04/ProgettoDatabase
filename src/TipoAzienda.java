@@ -1,4 +1,4 @@
 public enum TipoAzienda {
-    pubblica,
-    privata
+    PUBBLICA,
+    PRIVATA
 }

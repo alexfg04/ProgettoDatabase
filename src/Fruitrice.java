@@ -7,15 +7,15 @@ public class Fruitrice extends Azienda {
         super(partita_iva, tipo, mission, nome, numeroDipendenti);
     }
 
-    public void iscrivi(int codice_classe, int numeroDipendenti) {
+    public void iscrivi(int codiceClasse, int numeroDipendenti) {
         String query = "INSERT INTO Iscrizione (id_azienda, codice_classe, n_dipendenti)" +
                 "VALUES (?, ?, ?)";
 
         try(Connection conn = Database.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, this.getPartita_iva());
-            ps.setInt(2, codice_classe);
+            ps.setString(1, this.getPartitaIva());
+            ps.setInt(2, codiceClasse);
             ps.setInt(3, numeroDipendenti);
 
             ps.executeUpdate();

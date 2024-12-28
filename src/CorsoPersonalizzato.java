@@ -1,37 +1,38 @@
-public class CorsoPersonalizzato {
+import java.time.LocalDate;
 
-    private static int id_cat;
+public class CorsoPersonalizzato {
+    private static int id;
     private String titolo;
 
-    private String date_in;
-    private String date_fine;
+    private LocalDate dataInizio;
+    private LocalDate dataFine;
     private String tutor;
     private boolean DMA; // Dispositivo o strumento richiesto
-    private int n_trasferte; // Numero di trasferte previste
+    private int numTrasferte; // Numero di trasferte previste
     private String Descrizione;
-    private Double Costo_servizio;
+    private Double costoServizio;
 
     // Campi per memorizzare i valori degli enum
     private ModalitaErogazione modalita;
     private TipoServizio tipoServizio;
 
     // Costruttore
-    public CorsoPersonalizzato(String titolo, String date_in, String date_fine, String tutor, boolean DMA, int n_trasferte, String descrizione, Double costo_servizio, ModalitaErogazione modalita, TipoServizio tipoServizio) {
+    public CorsoPersonalizzato(String titolo, LocalDate DataInizio, LocalDate dataFine, String tutor, boolean DMA, int numTrasferte, String descrizione, Double costoServizio, ModalitaErogazione modalita, TipoServizio tipoServizio) {
         this.titolo = titolo;
-        this.date_in = date_in;
-        this.date_fine = date_fine;
+        this.dataInizio = DataInizio;
+        this.dataFine = dataFine;
         this.tutor = tutor;
         this.DMA = DMA;
-        this.n_trasferte = n_trasferte;
+        this.numTrasferte = numTrasferte;
         Descrizione = descrizione;
-        Costo_servizio = costo_servizio;
+        this.costoServizio = costoServizio;
         this.modalita = modalita;
         this.tipoServizio = tipoServizio;
     }
 
     // Getter e Setter
     public int getId() {
-        return id_cat;
+        return id;
     }
 
     public String getTitolo() {
@@ -42,20 +43,20 @@ public class CorsoPersonalizzato {
         this.titolo = titolo;
     }
 
-    public String getDate_in() {
-        return date_in;
+    public LocalDate getDataInizio() {
+        return dataInizio;
     }
 
-    public void setDate_in(String date_in) {
-        this.date_in = date_in;
+    public void setDataInizio(LocalDate dataInizio) {
+        this.dataInizio = dataInizio;
     }
 
-    public String getDate_fine() {
-        return date_fine;
+    public LocalDate getDataFine() {
+        return dataFine;
     }
 
-    public void setDate_fine(String date_fine) {
-        this.date_fine = date_fine;
+    public void setDataFine(LocalDate dataFine) {
+        this.dataFine = dataFine;
     }
 
     public String getTutor() {
@@ -74,12 +75,12 @@ public class CorsoPersonalizzato {
         this.DMA = DMA;
     }
 
-    public int getN_trasferte() {
-        return n_trasferte;
+    public int getNumTrasferte() {
+        return numTrasferte;
     }
 
-    public void setN_trasferte(int n_trasferte) {
-        this.n_trasferte = n_trasferte;
+    public void setNumTrasferte(int numTrasferte) {
+        this.numTrasferte = numTrasferte;
     }
 
     public String getDescrizione() {
@@ -90,12 +91,12 @@ public class CorsoPersonalizzato {
         this.Descrizione = Descrizione;
     }
 
-    public Double getCosto_servizio() {
-        return Costo_servizio;
+    public Double getCostoServizio() {
+        return costoServizio;
     }
 
-    public void setCosto_servizio(Double Costo_servizio) {
-        this.Costo_servizio = Costo_servizio;
+    public void setCostoServizio(Double Costo_servizio) {
+        this.costoServizio = Costo_servizio;
     }
 
     public ModalitaErogazione getModalita() {
@@ -119,13 +120,13 @@ public class CorsoPersonalizzato {
     public String toString() {
         return "Corso_Personalizzato{" +
                 "titolo='" + titolo + '\'' +
-                ", date_in='" + date_in + '\'' +
-                ", date_fine='" + date_fine + '\'' +
+                ", date_in='" + dataInizio + '\'' +
+                ", date_fine='" + dataFine + '\'' +
                 ", tutor='" + tutor + '\'' +
                 ", DMA=" + DMA +
-                ", n_trasferte=" + n_trasferte +
+                ", n_trasferte=" + numTrasferte +
                 ", Descrizione='" + Descrizione + '\'' +
-                ", Costo_servizio=" + Costo_servizio +
+                ", Costo_servizio=" + costoServizio +
                 ", modalita=" + modalita +
                 ", tipoServizio=" + tipoServizio +
                 '}';

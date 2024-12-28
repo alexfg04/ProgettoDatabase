@@ -1,20 +1,20 @@
 public abstract class Azienda {
-    private String partita_iva;
+    private String partitaIva;
     private TipoAzienda tipo;
     private String mission;
     private String nome;
     private int numeroDipendenti;
 
-    public Azienda(String partita_iva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
-        this.partita_iva = partita_iva;
+    public Azienda(String partitaIva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
+        this.partitaIva = partitaIva;
         this.tipo = tipo;
         this.mission = mission;
         this.nome = nome;
         this.numeroDipendenti = numeroDipendenti;
     }
 
-    public String getPartita_iva() {
-        return partita_iva;
+    public String getPartitaIva() {
+        return partitaIva;
     }
 
     public TipoAzienda getTipo() {

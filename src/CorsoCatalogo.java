@@ -1,33 +1,33 @@
 public class CorsoCatalogo {
-    private static int id_cat;
-    private String Titolo;
+    private static int id;
+    private String titolo;
 
     public CorsoCatalogo(String titolo, String settore, String descrizione, String argomento, double costo_A_Persona, ModalitaErogazione modalita, TipoServizio tipoServizio) {
-        Titolo = titolo;
-        Settore = settore;
-        Descrizione = descrizione;
-        Argomento = argomento;
-        Costo_A_Persona = costo_A_Persona;
+        this.titolo = titolo;
+        this.settore = settore;
+        this.descrizione = descrizione;
+        this.argomento = argomento;
+        costoAPersona = costo_A_Persona;
         this.modalita = modalita;
         this.tipoServizio = tipoServizio;
     }
 
     public int getId() {
-        return id_cat;
+        return id;
     }
 
     public String getTitolo() {
-        return Titolo;
+        return titolo;
     }
 
     public void setTitolo(String titolo) {
-        Titolo = titolo;
+        this.titolo = titolo;
     }
 
-    private String Settore;
-    private String Argomento;
-    private String Descrizione;
-    private double Costo_A_Persona;
+    private String settore;
+    private String argomento;
+    private String descrizione;
+    private double costoAPersona;
 
     // Campi per memorizzare i valori degli enum
     private ModalitaErogazione modalita;
@@ -35,35 +35,35 @@ public class CorsoCatalogo {
 
     // Getter e Setter
     public String getSettore() {
-        return Settore;
+        return settore;
     }
 
     public void setSettore(String settore) {
-        Settore = settore;
+        this.settore = settore;
     }
 
     public String getArgomento() {
-        return Argomento;
+        return argomento;
     }
 
     public void setArgomento(String argomento) {
-        Argomento = argomento;
+        this.argomento = argomento;
     }
 
     public String getDescrizione() {
-        return Descrizione;
+        return descrizione;
     }
 
     public void setDescrizione(String descrizione) {
-        Descrizione = descrizione;
+        this.descrizione = descrizione;
     }
 
-    public double getCosto_A_Persona() {
-        return Costo_A_Persona;
+    public double getCostoAPersona() {
+        return costoAPersona;
     }
 
-    public void setCosto_A_Persona(double costo_A_Persona) {
-        Costo_A_Persona = costo_A_Persona;
+    public void setCostoAPersona(double costoAPersona) {
+        this.costoAPersona = costoAPersona;
     }
 
     public ModalitaErogazione getModalita() {
@@ -87,11 +87,11 @@ public class CorsoCatalogo {
     @Override
     public String toString() {
         return "Corso_Catalogo{" +
-                "Titolo='" + Titolo + '\'' +
-                ", Settore='" + Settore + '\'' +
-                ", Argomento='" + Argomento + '\'' +
-                ", Descrizione='" + Descrizione + '\'' +
-                ", Costo_A_Persona=" + Costo_A_Persona +
+                "Titolo='" + titolo + '\'' +
+                ", Settore='" + settore + '\'' +
+                ", Argomento='" + argomento + '\'' +
+                ", Descrizione='" + descrizione + '\'' +
+                ", Costo_A_Persona=" + costoAPersona +
                 ", modalita=" + modalita +
                 ", tipoServizio=" + tipoServizio +
                 '}';
