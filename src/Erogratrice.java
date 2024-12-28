@@ -4,8 +4,9 @@ import java.sql.SQLException;
 
 public class Erogratrice extends Azienda {
     private double ricavo;
-    public Erogratrice(String partita_iva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
-        super(partita_iva, tipo, mission, nome, numeroDipendenti);
+    public Erogratrice(String partitaIva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
+        super(partitaIva, tipo, mission, nome, numeroDipendenti);
+        ricavo = 0.0;
     }
 
     public double getRicavo() {
@@ -16,21 +17,27 @@ public class Erogratrice extends Azienda {
         this.ricavo = ricavo;
     }
 
-    public void definisci(Classe classe) {
-        if(!classe.isOnDatabase()) {
-            classe.caricaSuDatabase();
-        }
-        // Codice per definire la classe su un database
+    public void AggiungiDocenteAClasse(int codiceClasse, String codiceFiscaleDocente) {
         try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Definizione (id_azienda, codice_classe)" +
+            String query = "INSERT INTO Collaborazione (id_classe, persona)" +
                     "VALUES (?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, this.getPartitaIva());
-            stmt.setInt(2, classe.getCodice());
-            stmt.executeUpdate();
-            stmt.close();
-        } catch (SQLException e) {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, codiceClasse);
+            ps.setString(2, codiceFiscaleDocente);
+
+            ps.executeUpdate();
+            System.out.println("Tutor aggiunto alla classe");
+
+        } catch(SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    /* Da rifare
+    public void definisciClasse(@NotNull Classe classe) {
+        if(!classe.isOnDatabase()) {
+            classe.caricaSuDatabase(this.getPartitaIva());
+        }
+    }
+    */
 }

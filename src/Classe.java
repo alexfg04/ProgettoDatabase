@@ -21,17 +21,20 @@ public class Classe {
         this.onDatabase = false;
     }
 
-    protected void caricaSuDatabase() {
+    protected void caricaSuDatabase(String Azienda) {
+        if(isOnDatabase()) {
+            return;
+        }
         // Codice per caricare i dati su un database
         try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Classe (codice, data_in, data_fine, scadenza_iscrizioni) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO Classe (codice, azienda, data_in, data_fine, scadenza_iscrizioni) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, codice);
-            stmt.setDate(2, Date.valueOf(inizio));
-            stmt.setDate(3, Date.valueOf(fine));
-            stmt.setDate(4, Date.valueOf(scadenzaIscrizione));
+            stmt.setString(2, Azienda);
+            stmt.setDate(3, Date.valueOf(inizio));
+            stmt.setDate(4, Date.valueOf(fine));
+            stmt.setDate(5, Date.valueOf(scadenzaIscrizione));
             stmt.executeUpdate();
-            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,7 +82,6 @@ public class Classe {
             stmt.setDouble(1, ricavo);
             stmt.setInt(2, codice);
             stmt.executeUpdate();
-            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
