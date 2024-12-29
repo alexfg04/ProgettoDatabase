@@ -40,4 +40,21 @@ public class Erogratrice extends Azienda {
         }
     }
     */
+
+    /*  Modifica del Docente/Tutor assegnato con al corso Personaalizzato*/
+    public void ModificaDocenteCorsoPersonalizzato(int idCorsoPersonalizzato, String nuovoCodiceFiscaleTutor) {
+        try (Connection conn = Database.getConnection()) {
+            // Query SQL per aggiornare il tutor associato al corso personalizzato
+            String query = "UPDATE CorsoPersonalizzato SET tutor = ? WHERE id_corso_personalizzato = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            // Imposta i parametri della query
+            ps.setString(1, nuovoCodiceFiscaleTutor);
+            ps.setInt(2, idCorsoPersonalizzato);
+            // Esegui l'aggiornamento
+             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la modifica del tutor per il corso personalizzato.", e);
+        }
+    }
+
 }

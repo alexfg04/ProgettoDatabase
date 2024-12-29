@@ -17,7 +17,7 @@ Parte 3 del progetto.
 - [x] Iscrizione di un'azienda a una classe;
 - [x] Richiesta di un corso personalizzato;
 - [x] Aggiunta di un nuovo docente/tutor a una classe;
-- [ ] Modifica del docente/tutor a cui è affidato un corso personalizzato;
+- [x] Modifica del docente/tutor a cui è affidato un corso personalizzato;
 - [ ] Stampa di tutti i corsi a catalogo messi a disposizione da un’azienda erogatrice;
 - [ ] Stampa di tutte le aziende erogatrici non impegnate in corsi personalizzati;
 - [ ] Verifica della possibilità di assegnare un tutor/docente ad un corso;
