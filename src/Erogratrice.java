@@ -2,6 +2,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static javax.swing.text.html.HTML.Tag.SELECT;
+
 public class Erogratrice extends Azienda {
     private double ricavo;
     public Erogratrice(String partitaIva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
@@ -54,6 +56,33 @@ public class Erogratrice extends Azienda {
              ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la modifica del tutor per il corso personalizzato.", e);
+        }
+    }
+
+    public void verificaTutorNonCoinvolti() {
+        String query = """SELECT T.codice_fiscale,T.nome,T.cognome FROM Tutor T LEFT JOIN Collaborazione C ON T.codice_fiscale = C.persona WHERE C.id_classe IS NULL; """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("Tutor non coinvolti in corsi:");
+            boolean tutorNonCoinvolti = false;
+
+            while (rs.next()) {
+                tutorNonCoinvolti = true;
+                String codiceFiscale = rs.getString("codice_fiscale");
+                String nome = rs.getString("nome");
+                String cognome = rs.getString("cognome");
+                System.out.printf("Codice Fiscale: %s - Nome: %s - Cognome: %s%n", codiceFiscale, nome, cognome);
+            }
+
+            if (!tutorNonCoinvolti) {
+                System.out.println("Tutti i tutor sono attualmente coinvolti in corsi.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la verifica dei tutor non coinvolti in corsi.", e);
         }
     }
 
