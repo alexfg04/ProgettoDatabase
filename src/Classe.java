@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Classe {
-    private int codice;
-    private LocalDate inizio;
+    private final int codice;
+    private final LocalDate inizio;
     private LocalDate fine;
     private LocalDate scadenzaIscrizione;
     private double ricavo;

@@ -59,6 +59,7 @@ public class Erogratrice extends Azienda {
     }
 
     public void verificaTutorDisponibili() {
+        boolean tutorNonCoinvolti = false;
         String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T LEFT JOIN corso_personalizzato C ON T.cf = C.tutor WHERE C.tutor IS NULL; ";
 
         try (Connection conn = Database.getConnection();
@@ -66,7 +67,6 @@ public class Erogratrice extends Azienda {
              ResultSet rs = ps.executeQuery()) {
 
             System.out.println("Tutor non coinvolti in corsi:");
-            boolean tutorNonCoinvolti = false;
 
             while (rs.next()) {
                 tutorNonCoinvolti = true;
@@ -82,6 +82,22 @@ public class Erogratrice extends Azienda {
 
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la verifica dei tutor non coinvolti in corsi.", e);
+        }
+    }
+
+    // Verifica se il docente/tutor non è associato a nessun corso personalizzato
+    public boolean verificaTutor(String codiceFiscaleDocente) {
+        String query = "SELECT * FROM docenti_tutor WHERE cf = ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, codiceFiscaleDocente);
+            try (ResultSet rs = ps.executeQuery()) {
+                // next restituisce true se il ResultSet contiene almeno una riga
+                return !rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la verifica del docente.", e);
         }
     }
 }

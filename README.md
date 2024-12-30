@@ -20,7 +20,7 @@ Parte 3 del progetto.
 - [x] Modifica del docente/tutor a cui è affidato un corso personalizzato;
 - [ ] Stampa di tutti i corsi a catalogo messi a disposizione da un’azienda erogatrice;
 - [ ] Stampa di tutte le aziende erogatrici non impegnate in corsi personalizzati;
-- [ ] Verifica della possibilità di assegnare un tutor/docente ad un corso;
+- [x] Verifica della possibilità di assegnare un tutor/docente a un corso;
 - [x] Verifica l’eventuale presenza di tutor attualmente non coinvolti in corsi;
 - [ ] Per ciascun corso a catalogo, stampare il numero totale di discenti;
 - [ ] Stampa i dati del docente/tutor maggiormente impiegato in corsi (a catalogo e/o personalizzato);

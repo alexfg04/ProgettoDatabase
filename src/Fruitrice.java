@@ -1,4 +1,3 @@
-import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,14 +26,14 @@ public class Fruitrice extends Azienda {
         }
     }
 
-    public void richiediPersonalizzato(int idCorso, LocalDate data) {
+    public void richiediPersonalizzato(int idCorso) {
         try(Connection conn = Database.getConnection()) {
             String query = "INSERT INTO Richiesta (id_azienda, id_c_pers, data_richiesta" +
                     "VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, this.getPartitaIva());
             ps.setInt(2, idCorso);
-            ps.setDate(3, Date.valueOf(data));
+            ps.setDate(3, Date.valueOf(LocalDate.now()));
 
             ps.executeUpdate();
             System.out.println("Richiesta inviata");
