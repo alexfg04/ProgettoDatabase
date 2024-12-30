@@ -1,8 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static javax.swing.text.html.HTML.Tag.SELECT;
 
 public class Erogratrice extends Azienda {
     private double ricavo;
@@ -43,11 +42,11 @@ public class Erogratrice extends Azienda {
     }
     */
 
-    /*  Modifica del Docente/Tutor assegnato con al corso Personaalizzato*/
+    /*  Modifica del Docente/Tutor assegnato con al corso Personalizzato*/
     public void ModificaDocenteCorsoPersonalizzato(int idCorsoPersonalizzato, String nuovoCodiceFiscaleTutor) {
         try (Connection conn = Database.getConnection()) {
             // Query SQL per aggiornare il tutor associato al corso personalizzato
-            String query = "UPDATE CorsoPersonalizzato SET tutor = ? WHERE id_corso_personalizzato = ?";
+            String query = "UPDATE Corso_Personalizzato SET tutor = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             // Imposta i parametri della query
             ps.setString(1, nuovoCodiceFiscaleTutor);
@@ -59,8 +58,8 @@ public class Erogratrice extends Azienda {
         }
     }
 
-    public void verificaTutorNonCoinvolti() {
-        String query = """SELECT T.codice_fiscale,T.nome,T.cognome FROM Tutor T LEFT JOIN Collaborazione C ON T.codice_fiscale = C.persona WHERE C.id_classe IS NULL; """;
+    public void verificaTutorDisponibili() {
+        String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T LEFT JOIN corso_personalizzato C ON T.cf = C.tutor WHERE C.tutor IS NULL; ";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
@@ -71,7 +70,7 @@ public class Erogratrice extends Azienda {
 
             while (rs.next()) {
                 tutorNonCoinvolti = true;
-                String codiceFiscale = rs.getString("codice_fiscale");
+                String codiceFiscale = rs.getString("cf");
                 String nome = rs.getString("nome");
                 String cognome = rs.getString("cognome");
                 System.out.printf("Codice Fiscale: %s - Nome: %s - Cognome: %s%n", codiceFiscale, nome, cognome);
@@ -85,5 +84,4 @@ public class Erogratrice extends Azienda {
             throw new RuntimeException("Errore durante la verifica dei tutor non coinvolti in corsi.", e);
         }
     }
-
 }
