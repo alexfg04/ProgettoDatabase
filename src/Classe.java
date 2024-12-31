@@ -25,10 +25,10 @@ public class Classe {
         if(isOnDatabase()) {
             return;
         }
+        String query = "INSERT INTO Classe (codice, azienda, data_in, data_fine, scadenza_iscrizioni) VALUES (?, ?, ?, ?, ?)";
         // Codice per caricare i dati su un database
-        try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Classe (codice, azienda, data_in, data_fine, scadenza_iscrizioni) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
+        try(Connection conn = Database.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, codice);
             stmt.setString(2, Azienda);
             stmt.setDate(3, Date.valueOf(inizio));

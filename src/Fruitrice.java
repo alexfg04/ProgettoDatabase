@@ -10,10 +10,10 @@ public class Fruitrice extends Azienda {
     }
 
     public void iscriviAClasse(int codiceClasse, int numeroDipendenti) {
-        try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Iscrizione (id_azienda, codice_classe, n_dipendenti)" +
-                    "VALUES (?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(query);
+        String query = "INSERT INTO Iscrizione (id_azienda, codice_classe, n_dipendenti)" +
+                "VALUES (?, ?, ?)";
+        try(Connection conn = Database.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, this.getPartitaIva());
             ps.setInt(2, codiceClasse);
             ps.setInt(3, numeroDipendenti);
@@ -27,10 +27,10 @@ public class Fruitrice extends Azienda {
     }
 
     public void richiediPersonalizzato(int idCorso) {
-        try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Richiesta (id_azienda, id_c_pers, data_richiesta" +
-                    "VALUES (?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(query);
+        String query = "INSERT INTO Richiesta (id_azienda, id_c_pers, data_richiesta" +
+                "VALUES (?, ?, ?)";
+        try(Connection conn = Database.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, this.getPartitaIva());
             ps.setInt(2, idCorso);
             ps.setDate(3, Date.valueOf(LocalDate.now()));

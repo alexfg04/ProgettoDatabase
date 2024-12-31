@@ -19,10 +19,10 @@ public class Erogratrice extends Azienda {
     }
 
     public void AggiungiDocenteAClasse(int codiceClasse, String codiceFiscaleDocente) {
-        try(Connection conn = Database.getConnection()) {
-            String query = "INSERT INTO Collaborazione (id_classe, persona)" +
-                    "VALUES (?, ?)";
-            PreparedStatement ps = conn.prepareStatement(query);
+        String query = "INSERT INTO Collaborazione (id_classe, persona)" +
+                "VALUES (?, ?)";
+        try(Connection conn = Database.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, codiceClasse);
             ps.setString(2, codiceFiscaleDocente);
 
@@ -42,12 +42,11 @@ public class Erogratrice extends Azienda {
     }
     */
 
-    /*  Modifica del Docente/Tutor assegnato con al corso Personalizzato*/
+    /*  Modifica del Docente/Tutor assegnato con al corso  */
     public void ModificaDocenteCorsoPersonalizzato(int idCorsoPersonalizzato, String nuovoCodiceFiscaleTutor) {
-        try (Connection conn = Database.getConnection()) {
-            // Query SQL per aggiornare il tutor associato al corso personalizzato
-            String query = "UPDATE Corso_Personalizzato SET tutor = ? WHERE id = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
+        String query = "UPDATE Corso_Personalizzato SET tutor = ? WHERE id = ?";
+        try (Connection conn = Database.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)) {
             // Imposta i parametri della query
             ps.setString(1, nuovoCodiceFiscaleTutor);
             ps.setInt(2, idCorsoPersonalizzato);
@@ -58,13 +57,15 @@ public class Erogratrice extends Azienda {
         }
     }
 
+    /* Stampa i tutor che non sono impegnati in nessun corso */
     public void verificaTutorDisponibili() {
         boolean tutorNonCoinvolti = false;
-        String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T LEFT JOIN corso_personalizzato C ON T.cf = C.tutor WHERE C.tutor IS NULL; ";
+        String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T " +
+                "LEFT JOIN corso_personalizzato C ON T.cf = C.tutor WHERE C.tutor IS NULL; ";
 
         try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+            PreparedStatement ps = conn.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
 
             System.out.println("Tutor non coinvolti in corsi:");
 
@@ -85,17 +86,16 @@ public class Erogratrice extends Azienda {
         }
     }
 
-    // Verifica se il docente/tutor non è associato a nessun corso personalizzato
+    /* Verifica se il docente/tutor non è associato a nessun corso personalizzato */
     public boolean verificaTutor(String codiceFiscaleDocente) {
         String query = "SELECT * FROM docenti_tutor WHERE cf = ?";
 
         try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+            PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, codiceFiscaleDocente);
-            try (ResultSet rs = ps.executeQuery()) {
-                // next restituisce true se il ResultSet contiene almeno una riga
-                return !rs.next();
-            }
+            ResultSet rs = ps.executeQuery();
+            // next restituisce true se il ResultSet contiene almeno una riga
+            return !rs.next();
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la verifica del docente.", e);
         }
