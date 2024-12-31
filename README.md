@@ -5,12 +5,13 @@ Parte 3 del progetto.
 
 ## Modifiche effettuate
 ### Modifiche al database:
-- Rimossa la tabella Gestione e aggiunto il campo tutor come chiave esterna in Corso_Personalizzato
-- Rimosso la tabella Definizione e aggiunto il campo azienda come chiave esterna in Classe
+- Rimossa la tabella `gestione` e aggiunto il campo `tutor` nella tabella `corso_personalizzato`, definito come chiave esterna verso la tabella `docente_tutor`.
+- Rimossa la tabella `definizione` e aggiunto il campo `azienda` nella tabella `Classe`, definito come chiave esterna verso la tabella `azienda`.
+- Aggiunto il campo `id_azienda` nella tabella `corso_a_catalogo`, definito come chiave esterna verso la tabella `azienda`.
 
 ### Modifiche alle parti precedenti del progetto:
-- Cambiata la cardinalità tra Proposta e A Catalogo da 1:1 a 1:N (nello schema relazionale rimane invariato).
-- Cardinalità tra Gestione e Personalizzato cambiata da 1:N a 1:1.
+- Cambiata la cardinalità tra **Proposta** e **A Catalogo** da **1:1** a **1:N** (nello schema relazionale rimane invariato).
+- Cardinalità tra **Gestione** e **Personalizzato** cambiata da **1:N** a **1:1**.
 
 ## Tasks
 - [ ] Registrazione di un corso a catalogo;
