@@ -14,7 +14,7 @@ Parte 3 del progetto.
 - Cardinalità tra **Gestione** e **Personalizzato** cambiata da **1:N** a **1:1**.
 
 ## Tasks
-- [ ] Registrazione di un corso a catalogo;
+- [x] Registrazione di un corso a catalogo;
 - [x] Iscrizione di un'azienda a una classe;
 - [x] Richiesta di un corso personalizzato;
 - [x] Aggiunta di un nuovo docente/tutor a una classe;
