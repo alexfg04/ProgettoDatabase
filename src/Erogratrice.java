@@ -34,13 +34,11 @@ public class Erogratrice extends Azienda {
         }
     }
 
-    /* Da rifare
-    public void definisciClasse(@NotNull Classe classe) {
-        if(!classe.isOnDatabase()) {
-            classe.caricaSuDatabase(this.getPartitaIva());
+    public void ErogaCorso(CorsoCatalogo corso) {
+        if(!corso.isOnDatabase()) {
+            corso.caricaSuDatabase(getPartitaIva());
         }
     }
-    */
 
     /*  Modifica del Docente/Tutor assegnato con al corso  */
     public void ModificaDocenteCorsoPersonalizzato(int idCorsoPersonalizzato, String nuovoCodiceFiscaleTutor) {
