@@ -8,7 +8,7 @@ Parte 3 del progetto.
 - Rimossa la tabella `gestione` e aggiunto il campo `tutor` nella tabella `corso_personalizzato`, definito come chiave esterna verso la tabella `docente_tutor`.
 - Rimossa la tabella `definizione` e aggiunto il campo `azienda` nella tabella `Classe`, definito come chiave esterna verso la tabella `azienda`.
 - Aggiunto il campo `id_azienda` nella tabella `corso_a_catalogo`, definito come chiave esterna verso la tabella `azienda`.
-
+- Modificare il mapping e schema per corso a catalogo
 ### Modifiche alle parti precedenti del progetto:
 - Cambiata la cardinalità tra **Proposta** e **A Catalogo** da **1:1** a **1:N** (nello schema relazionale rimane invariato).
 - Cardinalità tra **Gestione** e **Personalizzato** cambiata da **1:N** a **1:1**.
@@ -19,8 +19,8 @@ Parte 3 del progetto.
 - [x] Richiesta di un corso personalizzato;
 - [x] Aggiunta di un nuovo docente/tutor a una classe;
 - [x] Modifica del docente/tutor a cui è affidato un corso personalizzato;
-- [ ] Stampa di tutti i corsi a catalogo messi a disposizione da un’azienda erogatrice;
-- [ ] Stampa di tutte le aziende erogatrici non impegnate in corsi personalizzati;
+- [x] Stampa di tutti i corsi a catalogo messi a disposizione da un’azienda erogatrice;
+- [x] Stampa di tutte le aziende erogatrici non impegnate in corsi personalizzati;
 - [x] Verifica della possibilità di assegnare un tutor/docente a un corso;
 - [x] Verifica l’eventuale presenza di tutor attualmente non coinvolti in corsi;
 - [ ] Per ciascun corso a catalogo, stampare il numero totale di discenti;
