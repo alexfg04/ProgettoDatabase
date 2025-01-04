@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class Classe {
@@ -11,6 +8,7 @@ public class Classe {
     private LocalDate scadenzaIscrizione;
     private double ricavo;
     private boolean onDatabase;
+    private String azienda;
 
     public Classe(int codice, LocalDate inizio, LocalDate fine, LocalDate scadenzaIscrizione) {
         this.codice = codice;
@@ -86,4 +84,78 @@ public class Classe {
             throw new RuntimeException(e);
         }
     }
+
+
+    public void stampaDettagliCorsoConDiscenti(String codiceClasse) {
+        String query = """
+            SELECT 
+                c.titolo AS titolo_corso,
+                SUM(i.n_dipendenti) AS totale_discenti,
+                d.descrizione,
+                d.mod_erogazione,
+                d.settore,
+                d.argomenti,
+                d.durata,
+                d.tipo_servizio
+            FROM corso_acatalogo c
+            JOIN dettagli_c_acatalogo d ON c.id_C_catalogo = d.id_catalogo
+            JOIN classe cl ON c.id_C_catalogo = cl.id_corso
+            JOIN iscrizione i ON cl.codice = i.codice_classe
+            WHERE cl.codice = ?
+            GROUP BY 
+                c.titolo,
+                d.descrizione,
+                d.mod_erogazione,
+                d.settore,
+                d.argomenti,
+                d.durata,
+                d.tipo_servizio;
+        """;
+
+        try (Connection conn = Database.getConnection(); // Assicurati di avere un metodo Database.getConnection()
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            // Impostazione del parametro (codice della classe)
+            ps.setString(1, codiceClasse);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                System.out.println("Dettagli del corso:");
+
+                boolean corsiTrovati = false; // Variabile per tracciare se sono stati trovati corsi
+
+                // Itera attraverso i risultati della query
+                while (rs.next()) {
+                    corsiTrovati = true;
+
+                    // Recupera i dati dal ResultSet
+                    String titolo = rs.getString("titolo_corso");
+                    int totaleDiscenti = rs.getInt("totale_discenti");
+                    String descrizione = rs.getString("descrizione");
+                    String modErogazione = rs.getString("mod_erogazione");
+                    String settore = rs.getString("settore");
+                    String argomento = rs.getString("argomento");
+                    int durata = rs.getInt("durata");
+                    String tipoServizio = rs.getString("tipo_servizio");
+
+                    // Stampa i dettagli del corso
+                    System.out.printf(
+                            "Titolo del corso: %s%nTotale discenti: %d%nDescrizione: %s%n" +
+                                    "Modalità di erogazione: %s%nSettore: %s%nArgomento: %s%nDurata: %d ore%nTipo di servizio: %s%n",
+                            titolo, totaleDiscenti, descrizione, modErogazione, settore,
+                            argomento, durata, tipoServizio
+                    );
+                }
+
+                // Se non sono stati trovati corsi, stampa un messaggio
+                if (!corsiTrovati) {
+                    System.out.println("Nessun corso trovato per la classe con codice: " + codiceClasse);
+                }
+            }
+
+        } catch (SQLException e) {
+            // Gestione dell'eccezione in caso di errore durante la query
+            throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
+
 }

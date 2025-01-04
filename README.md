@@ -23,7 +23,7 @@ Parte 3 del progetto.
 - [x] Stampa di tutte le aziende erogatrici non impegnate in corsi personalizzati;
 - [x] Verifica della possibilità di assegnare un tutor/docente a un corso;
 - [x] Verifica l’eventuale presenza di tutor attualmente non coinvolti in corsi;
-- [ ] Per ciascun corso a catalogo, stampare il numero totale di discenti;
+- [x] Per ciascun corso a catalogo, stampare il numero totale di discenti;
 - [ ] Stampa i dati del docente/tutor maggiormente impiegato in corsi (a catalogo e/o personalizzato);
 - [ ] Stampa di tutti i corsi a catalogo per i quali non si è mai formata più di una classe;
 - [ ] Stampa dei dati delle aziende erogatrici, compreso il ricavo totale che hanno ottenuto dall’erogazione di tutte le tipologie di corsi;

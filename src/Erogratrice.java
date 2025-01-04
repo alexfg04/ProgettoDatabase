@@ -156,7 +156,7 @@ public class Erogratrice extends Azienda {
         }
     }
 
-        // Metodo per stampare le aziende non impegnate in corsi personalizzati
+    // Metodo per stampare le aziende non impegnate in corsi personalizzati
         public void stampaAziendeNonImpegnateInCorsiPersonalizzati() {
             // La query SQL per selezionare le aziende non impegnate in corsi personalizzati
             String query = """
@@ -190,8 +190,7 @@ public class Erogratrice extends Azienda {
                         String denominazione = rs.getString("denominazione");
 
                         // Stampa i dettagli dell'azienda
-                        System.out.printf(
-                                "P. IVA: %s, Tipo: %s, Mission: %s, Denominazione: %s%n",
+                        System.out.printf("P. IVA: %s, Tipo: %s, Mission: %s, Denominazione: %s%n",
                                 pIva, tipoAzienda, mission, denominazione
                         );
                     }
