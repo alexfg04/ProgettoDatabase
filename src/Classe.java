@@ -73,10 +73,10 @@ public class Classe {
 
     public void setRicavo(double ricavo) {
         this.ricavo = ricavo;
+        String query = "UPDATE Classe SET ricavo = ? WHERE codice = ?";
         // Codice per aggiornare il ricavo su un database
-        try(Connection conn = Database.getConnection()) {
-            String query = "UPDATE Classe SET ricavo = ? WHERE codice = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
+        try(Connection conn = Database.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setDouble(1, ricavo);
             stmt.setInt(2, codice);
             stmt.executeUpdate();
@@ -85,8 +85,27 @@ public class Classe {
         }
     }
 
+    public void stampaClasse() {
+        String query = "SELECT * FROM Classe WHERE codice = ?";
+        try(Connection conn = Database.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, this.codice);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                System.out.println("Codice: " + rs.getInt("codice"));
+                System.out.println("Azienda: " + rs.getString("azienda"));
+                System.out.println("Data inizio: " + rs.getDate("data_in"));
+                System.out.println("Data fine: " + rs.getDate("data_fine"));
+                System.out.println("Scadenza iscrizioni: " + rs.getDate("scadenza_iscrizioni"));
+                System.out.println("Ricavo: " + rs.getDouble("ricavo"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public void stampaDettagliCorsoConDiscenti(String codiceClasse) {
+
+    public void stampaDettagliCorsoConDiscenti() {
         String query = """
             SELECT 
                 c.titolo AS titolo_corso,
@@ -116,7 +135,7 @@ public class Classe {
              PreparedStatement ps = conn.prepareStatement(query)) {
 
             // Impostazione del parametro (codice della classe)
-            ps.setString(1, codiceClasse);
+            ps.setInt(1, this.codice);
 
             try (ResultSet rs = ps.executeQuery()) {
                 System.out.println("Dettagli del corso:");
@@ -148,7 +167,7 @@ public class Classe {
 
                 // Se non sono stati trovati corsi, stampa un messaggio
                 if (!corsiTrovati) {
-                    System.out.println("Nessun corso trovato per la classe con codice: " + codiceClasse);
+                    System.out.println("Nessun corso trovato per la classe con codice: " + this.codice);
                 }
             }
 
