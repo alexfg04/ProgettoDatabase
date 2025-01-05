@@ -97,4 +97,52 @@ public class CorsoCatalogo extends Corso {
                 ", tipoServizio=" + tipoServizio +
                 '}';
     }
+
+    public void stampaCorsiConUnaSolaClasseEDettagli() {
+        String query = """
+            SELECT 
+                ca.titolo, 
+                dc.settore, 
+                dc.argomenti, 
+                dc.mod_erogazione, 
+                dc.descrizione, 
+                COUNT(c.codice) AS num_classi
+            FROM corso_acatalogo ca
+            LEFT JOIN classe c ON ca.id_C_catalogo = c.id_corso
+            LEFT JOIN dettagli_c_acatalogo dc ON ca.id_C_catalogo= dc.id_catalogo
+            GROUP BY ca.titolo, dc.settore, dc.argomenti, dc.mod_erogazione, dc.descrizione
+            HAVING COUNT(c.codice) = 1;
+        """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            try (ResultSet rs = ps.executeQuery()) {
+                System.out.println("Corsi con una sola classe e relativi dettagli:");
+
+                boolean corsiTrovati = false;
+
+                while (rs.next()) {
+                    corsiTrovati = true;
+
+                    String titolo = rs.getString("titolo");
+                    String settore = rs.getString("settore");
+                    String argomenti = rs.getString("argomenti");
+                    String mod_erogazione = rs.getString("modalita erogazione");
+                    String descrizione = rs.getString("descrizione");
+                    int numClassi = rs.getInt("num_classi");
+
+                    System.out.printf("Titolo: %s, Settore: %s, Argomenti: %s, Modalità erogazione: %s, Descrizione: %s, Numero Classi: %d%n",
+                            titolo, settore, argomenti, mod_erogazione, descrizione, numClassi);
+                }
+
+                if (!corsiTrovati) {
+                    System.out.println("Nessun corso trovato con una sola classe formata.");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
 }
