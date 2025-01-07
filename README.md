@@ -26,6 +26,6 @@ Parte 3 del progetto.
 10. - [x] Per ciascun corso a catalogo, stampare il numero totale di discenti;
 11. - [x] Stampa i dati del docente/tutor maggiormente impiegato in corsi (a catalogo e/o personalizzato);
 12. - [x] Stampa di tutti i corsi a catalogo per i quali non si è mai formata più di una classe;
-13. - [ ] Stampa dei dati delle aziende erogatrici, compreso il ricavo totale che hanno ottenuto dall’erogazione di tutte le tipologie di corsi;
+13. - [x] Stampa dei dati delle aziende erogatrici, compreso il ricavo totale che hanno ottenuto dall’erogazione di tutte le tipologie di corsi;
 14. - [x] Stampa di ogni classe, compreso il ricavo ottenuto mediante la definizione della stessa;
 15. - [ ] Stampa una classifica delle aziende fruitrici sulla base del numero di servizi che ha richiesto (e.g., corsi di formazione personalizzati e/o corsi a catalogo).
