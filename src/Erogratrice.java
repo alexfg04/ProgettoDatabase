@@ -14,8 +14,73 @@ public class Erogratrice extends Azienda {
         return ricavo;
     }
 
+    private double calcolaRicavo() {
+        String query = """
+        SELECT
+            SUM(DC.costo) + SUM(C.ricavo) AS ricavo_totale
+        FROM Azienda A
+        JOIN Classe C ON A.p_iva = C.codice
+        JOIN Richiesta R ON A.p_iva = R.id_azienda
+        JOIN corso_personalizzato CP ON R.id_c_pers = CP.id
+        JOIN dettagli_corso_personalizzato DC ON CP.id = DC.id_corso
+        WHERE A.p_iva = ?;
+    """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, this.getPartitaIva());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("ricavo_totale");
+                } else {
+                    throw new RuntimeException("Classe non trovata per il codice: " + this.getPartitaIva());
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
+
     public void setRicavo(double ricavo) {
-        this.ricavo = ricavo;
+        this.ricavo = calcolaRicavo();
+        String query = "UPDATE azienda SET ricavo = ? WHERE p_iva = ?";
+        // Codice per aggiornare il ricavo su un database
+        try(Connection conn = Database.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setDouble(1, ricavo);
+            stmt.setString(2, this.getPartitaIva());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void stampaDati() {
+        String query = "SELECT p_iva, tipo, mission, denominazione, n_dipendenti, ricavo FROM azienda WHERE p_iva = ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, this.getPartitaIva());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String partitaIva = rs.getString("p_iva");
+                    String tipo = rs.getString("tipo");
+                    String mission = rs.getString("mission");
+                    String nome = rs.getString("denominazione");
+                    int numeroDipendenti = rs.getInt("n_dipendenti");
+                    double ricavo = rs.getDouble("ricavo");
+
+                    System.out.printf("Partita IVA: %s%nTipo: %s%nMission: %s%nNome: %s%nNumero Dipendenti: %d%n Ricavo: %.2f%n",
+                            partitaIva, tipo, mission, nome, numeroDipendenti, ricavo);
+                } else {
+                    System.out.println("Azienda non trovata.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la stampa dei dati dell'azienda.", e);
+        }
     }
 
     public void AggiungiDocenteAClasse(int codiceClasse, String codiceFiscaleDocente) {
@@ -93,7 +158,7 @@ public class Erogratrice extends Azienda {
 
     // Verifica se il docente/tutor non è associato a nessun corso personalizzato
     public boolean verificaTutor(String codiceFiscaleDocente) {
-        String query = "SELECT * FROM docenti_tutor WHERE cf = ?";
+        String query = "SELECT * FROM corso_personalizzato WHERE tutor = ?";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {

@@ -19,6 +19,34 @@ public class Classe {
         this.onDatabase = false;
     }
 
+    private double calcolaRicavo() {
+        String query = """
+        SELECT 
+            dc.costo_persona * (SELECT SUM(I.n_dipendenti)
+                                FROM iscrizione I 
+                                WHERE I.codice_classe = C.codice) AS ricavo_classe
+        FROM Classe C
+        JOIN corso_acatalogo ca ON C.id_corso = ca.id_c_catalogo
+        JOIN dettagli_c_acatalogo dc ON ca.id_c_catalogo = dc.id_catalogo
+        WHERE C.codice = ?;
+    """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, codice);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("ricavo_classe");
+                } else {
+                    throw new RuntimeException("Classe non trovata per il codice: " + codice);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
+
     protected void caricaSuDatabase(String Azienda) {
         if(isOnDatabase()) {
             return;
@@ -72,7 +100,7 @@ public class Classe {
     }
 
     public void setRicavo(double ricavo) {
-        this.ricavo = ricavo;
+        this.ricavo = calcolaRicavo();
         String query = "UPDATE Classe SET ricavo = ? WHERE codice = ?";
         // Codice per aggiornare il ricavo su un database
         try(Connection conn = Database.getConnection();
@@ -177,4 +205,42 @@ public class Classe {
         }
     }
 
+    public static void stampaTutteLeClassi() {
+        String query = """
+            SELECT
+                C.codice,
+                C.data_in AS data_inizio,
+                C.data_fine,
+                C.scadenza_iscrizioni,
+                A.denominazione,
+                dc.costo_persona * (SELECT SUM(I.n_dipendenti)
+                                    FROM iscrizione I 
+                                    WHERE I.codice_classe = C.codice) AS ricavo
+            FROM Classe C
+            JOIN corso_acatalogo ca ON C.id_corso = ca.id_c_catalogo
+            JOIN dettagli_c_acatalogo dc ON ca.id_c_catalogo = dc.id_catalogo
+            JOIN Azienda A ON C.azienda = A.p_iva
+            ORDER BY C.codice, A.denominazione;
+        """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int codice = rs.getInt("codice");
+                Date dataInizio = rs.getDate("data_inizio");
+                Date dataFine = rs.getDate("data_fine");
+                Date scadenzaIscrizioni = rs.getDate("scadenza_iscrizioni");
+                String denominazione = rs.getString("denominazione");
+                double ricavo = rs.getDouble("ricavo");
+
+                System.out.printf("Codice: %d%nData Inizio: %s%nData Fine: %s%nScadenza Iscrizioni: %s%nDenominazione: %s%nRicavo: %.2f%n",
+                        codice, dataInizio, dataFine, scadenzaIscrizioni, denominazione, ricavo);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
 }

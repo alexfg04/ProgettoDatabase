@@ -38,7 +38,7 @@ public class Tutor {
 
 
     // Metodo per eseguire la query e stampare il docente con il maggiore numero di impieghi
-    public void stampaDocenteConTotaleImpiegniMassimo() {
+    public void stampaDocenteConImpiegoMassimo() {
         // La query SQL per ottenere il docente con il massimo totale di impieghi
         String query = """
             SELECT dt.cf AS codice_fiscale,

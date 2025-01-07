@@ -98,7 +98,7 @@ public class CorsoCatalogo extends Corso {
                 '}';
     }
 
-    public void stampaCorsiConUnaSolaClasseEDettagli() {
+    public void stampaCorsiConUnaSolaClasse() {
         String query = """
             SELECT 
                 ca.titolo, 
@@ -109,7 +109,7 @@ public class CorsoCatalogo extends Corso {
                 COUNT(c.codice) AS num_classi
             FROM corso_acatalogo ca
             LEFT JOIN classe c ON ca.id_C_catalogo = c.id_corso
-            LEFT JOIN dettagli_c_acatalogo dc ON ca.id_C_catalogo= dc.id_catalogo
+            LEFT JOIN dettagli_c_acatalogo dc ON ca.id_C_catalogo = dc.id_catalogo
             GROUP BY ca.titolo, dc.settore, dc.argomenti, dc.mod_erogazione, dc.descrizione
             HAVING COUNT(c.codice) = 1;
         """;
