@@ -72,7 +72,7 @@ public class Fruitrice extends Azienda {
 
             // Esecuzione della query
             try (ResultSet rs = ps.executeQuery()) {
-                System.out.println("Classifica delle aziende in base al numero di servizi richiesti:");
+                System.out.println("Classifica delle aziende in base al numero di servizi  richiesti:");
 
                 // Scorri i risultati della query
                 while (rs.next()) {
