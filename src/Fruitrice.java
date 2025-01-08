@@ -24,7 +24,7 @@ public class Fruitrice extends Azienda {
     }
 
     public void richiediPersonalizzato(int idCorso) {
-        String query = "INSERT INTO Richiesta (id_azienda, id_c_pers, data_richiesta" +
+        String query = "INSERT INTO Richiesta (id_azienda, id_c_pers, data_richiesta)" +
                 "VALUES (?, ?, ?)";
         try(Connection conn = Database.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)) {
@@ -41,7 +41,7 @@ public class Fruitrice extends Azienda {
     }
 
 
-    public void stampaClassificaAziende() {
+    public static void stampaClassificaAziende() {
         // Query SQL
         String query = """
         SELECT 
@@ -92,4 +92,43 @@ public class Fruitrice extends Azienda {
         }
     }
 
+    public static void caricaTriggerVerificaLimiteSpesa() {
+        String query = """
+        CREATE TRIGGER verifica_limite_spesa
+        BEFORE INSERT
+        ON richiesta
+        FOR EACH ROW
+        BEGIN
+            DECLARE totale_spesa DECIMAL(10, 2);
+            -- Calculate the total spending for the company so far
+            SELECT COALESCE(SUM(DC.costo), 0)
+            INTO totale_spesa
+            FROM richiesta R
+            JOIN corso_personalizzato C ON R.id_c_pers = C.id
+            JOIN dettagli_corso_personalizzato DC ON C.id = DC.id_corso
+            WHERE R.id_azienda = NEW.id_azienda;
+            -- Add the cost of the new course being inserted
+            SET totale_spesa = totale_spesa + (
+                SELECT COALESCE(SUM(DC.costo), 0)
+                FROM corso_personalizzato C
+                JOIN dettagli_corso_personalizzato DC ON C.id = DC.id_corso
+                WHERE C.id = NEW.id_c_pers
+            );
+
+            -- Check if the spending limit is exceeded
+            IF totale_spesa > 40000 THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'azienda non può spendere più di 40.000 euro per corsi personalizzati';
+            END IF;
+        END
+        """;
+
+        try (Connection conn = Database.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(query);
+            System.out.println("Trigger caricato con successo.");
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante il caricamento del trigger.", e);
+        }
+    }
 }

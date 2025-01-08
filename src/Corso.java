@@ -1,5 +1,6 @@
 public abstract class Corso {
-    protected static int id;
+    private static int currentId = 0;
+    private int id;
     protected String titolo;
     protected String descrizione;
     protected ModalitaErogazione modalita;
@@ -10,7 +11,7 @@ public abstract class Corso {
         this.descrizione = descrizione;
         this.modalita = modalita;
         this.tipoServizio = tipoServizio;
-        id++;
+        id = ++currentId;
     }
 
     public int getId() {

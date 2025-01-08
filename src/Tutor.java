@@ -38,7 +38,7 @@ public class Tutor {
 
 
     // Metodo per eseguire la query e stampare il docente con il maggiore numero di impieghi
-    public void stampaDocenteConImpiegoMassimo() {
+    public static void stampaConImpiegoMassimo() {
         // La query SQL per ottenere il docente con il massimo totale di impieghi
         String query = """
             SELECT dt.cf AS codice_fiscale,
@@ -85,6 +85,36 @@ public class Tutor {
         } catch (SQLException e) {
             // Gestione dell'eccezione in caso di errore durante la query
             throw new RuntimeException("Errore durante l'esecuzione della query.", e);
+        }
+    }
+
+    public static void verificaNonCoinvolti() {
+        boolean tutorNonCoinvolti = false;
+        String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T " +
+                "LEFT JOIN corso_personalizzato C ON T.cf = C.tutor\n" +
+                "LEFT JOIN collaborazione CL ON T.cf = CL.persona\n" +
+                "WHERE C.tutor IS NULL AND CL.persona IS NULL;";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("Tutor non coinvolti in corsi:");
+
+            while (rs.next()) {
+                tutorNonCoinvolti = true;
+                String codiceFiscale = rs.getString("cf");
+                String nome = rs.getString("nome");
+                String cognome = rs.getString("cognome");
+                System.out.printf("Codice Fiscale: %s - Nome: %s - Cognome: %s%n", codiceFiscale, nome, cognome);
+            }
+
+            if (!tutorNonCoinvolti) {
+                System.out.println("Tutti i tutor sono attualmente coinvolti in corsi.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la verifica dei tutor non coinvolti in corsi.", e);
         }
     }
 }

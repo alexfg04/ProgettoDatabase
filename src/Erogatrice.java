@@ -3,9 +3,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Erogratrice extends Azienda {
+public class Erogatrice extends Azienda {
     private double ricavo;
-    public Erogratrice(String partitaIva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
+    public Erogatrice(String partitaIva, TipoAzienda tipo, String mission, String nome, int numeroDipendenti) {
         super(partitaIva, tipo, mission, nome, numeroDipendenti);
         ricavo = 0.0;
     }
@@ -16,13 +16,13 @@ public class Erogratrice extends Azienda {
 
     private double calcolaRicavo() {
         String query = """
-        SELECT
-            SUM(DC.costo) + SUM(C.ricavo) AS ricavo_totale
+         SELECT
+            COALESCE(SUM(DC.costo), 0) + COALESCE(SUM(C.ricavo), 0) AS ricavo_totale
         FROM Azienda A
-        JOIN Classe C ON A.p_iva = C.codice
-        JOIN Richiesta R ON A.p_iva = R.id_azienda
-        JOIN corso_personalizzato CP ON R.id_c_pers = CP.id
-        JOIN dettagli_corso_personalizzato DC ON CP.id = DC.id_corso
+        LEFT JOIN Classe C ON A.p_iva = C.codice
+        LEFT JOIN Richiesta R ON A.p_iva = R.id_azienda
+        LEFT JOIN corso_personalizzato CP ON R.id_c_pers = CP.id
+        LEFT JOIN dettagli_corso_personalizzato DC ON CP.id = DC.id_corso
         WHERE A.p_iva = ?;
     """;
 
@@ -42,7 +42,7 @@ public class Erogratrice extends Azienda {
         }
     }
 
-    public void setRicavo(double ricavo) {
+    public void setRicavo() {
         this.ricavo = calcolaRicavo();
         String query = "UPDATE azienda SET ricavo = ? WHERE p_iva = ?";
         // Codice per aggiornare il ricavo su un database
@@ -99,7 +99,7 @@ public class Erogratrice extends Azienda {
             ps.executeUpdate();
 
             // Messaggio di successo
-            System.out.println("Tutor aggiunto alla classe");
+            System.out.println("Tutor o Docente aggiunto alla classe");
 
         } catch(SQLException e) {
             // Gestione degli errori di SQL
@@ -126,33 +126,6 @@ public class Erogratrice extends Azienda {
              ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la modifica del tutor per il corso personalizzato.", e);
-        }
-    }
-
-    public void verificaTutorDisponibili() {
-        boolean tutorNonCoinvolti = false;
-        String query = "SELECT T.cf, T.nome, T.cognome FROM docenti_tutor T LEFT JOIN corso_personalizzato C ON T.cf = C.tutor WHERE C.tutor IS NULL; ";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-
-            System.out.println("Tutor non coinvolti in corsi:");
-
-            while (rs.next()) {
-                tutorNonCoinvolti = true;
-                String codiceFiscale = rs.getString("cf");
-                String nome = rs.getString("nome");
-                String cognome = rs.getString("cognome");
-                System.out.printf("Codice Fiscale: %s - Nome: %s - Cognome: %s%n", codiceFiscale, nome, cognome);
-            }
-
-            if (!tutorNonCoinvolti) {
-                System.out.println("Tutti i tutor sono attualmente coinvolti in corsi.");
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Errore durante la verifica dei tutor non coinvolti in corsi.", e);
         }
     }
 
@@ -202,9 +175,9 @@ public class Erogratrice extends Azienda {
 
                     String titolo = rs.getString("titolo");
                     String settore = rs.getString("settore");
-                    String argomento = rs.getString("argomento");
+                    String argomento = rs.getString("argomenti");
                     String descrizione = rs.getString("descrizione");
-                    double costoAPersona = rs.getDouble("costo_a_persona");
+                    double costoAPersona = rs.getDouble("costo_persona");
 
                     System.out.printf(
                             "Titolo: %s, Settore: %s, Argomento: %s, Descrizione: %s, Costo a persona: %.2f%n",
@@ -222,7 +195,7 @@ public class Erogratrice extends Azienda {
     }
 
     // Metodo per stampare le aziende non impegnate in corsi personalizzati
-        public void stampaAziendeNonImpegnateInCorsiPersonalizzati() {
+        public static void stampaAziendeNonImpegnateInCorsiPersonalizzati() {
             // La query SQL per selezionare le aziende non impegnate in corsi personalizzati
             String query = """
             SELECT a.p_iva, a.tipo, a.mission, a.denominazione
@@ -250,7 +223,7 @@ public class Erogratrice extends Azienda {
 
                         // Recupera i dati delle colonne dalla query
                         String pIva = rs.getString("p_iva");
-                        String tipoAzienda = rs.getString("tipo_azienda");
+                        String tipoAzienda = rs.getString("tipo");
                         String mission = rs.getString("mission");
                         String denominazione = rs.getString("denominazione");
 

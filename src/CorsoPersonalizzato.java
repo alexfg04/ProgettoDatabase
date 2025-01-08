@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 
 public class CorsoPersonalizzato extends Corso {
@@ -64,6 +67,34 @@ public class CorsoPersonalizzato extends Corso {
 
     public void setCostoServizio(Double costoServizio) {
         this.costoServizio = costoServizio;
+    }
+
+    public static void caricaTriggerVerificaLimiteCorsi() {
+        String query = """
+            CREATE TRIGGER verifica_limite_corsi
+            BEFORE INSERT
+            ON corso_personalizzato
+            FOR EACH ROW
+            BEGIN
+                DECLARE num_corsi INT;
+                SELECT COUNT(*)
+                INTO num_corsi
+                FROM corso_personalizzato
+                WHERE tutor = NEW.tutor;
+                IF num_corsi >= 3 THEN
+                    SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Il tutor non può gestire più di 3 corsi';
+                END IF;
+            END;
+        """;
+
+        try (Connection conn = Database.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(query);
+            System.out.println("Trigger caricato con successo.");
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante il caricamento del trigger.", e);
+        }
     }
 
     @Override
